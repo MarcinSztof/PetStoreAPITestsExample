@@ -7,7 +7,7 @@ namespace PetStoreAPITests.Data
 {
     public static class PetStoreDataGenerator
     {
-        public static Pet GetRandomPet() => new Pet() 
+        public static Pet GetBasicPet() => new Pet() 
             {
                 Id = DateGenerationUtils.GetRandomInt32(100000, 999999),
                 Name = DateGenerationUtils.GetRandomAlphabeticString(7),
@@ -16,6 +16,13 @@ namespace PetStoreAPITests.Data
                 Tags = new List<Tag>() { new Tag() { Id = 1, Name = "Exotic" } },
                 Status = PetStatus.Available
             };
+
+        public static Pet GetBasicPet(PetStatus status)
+        {
+            var pet = GetBasicPet();
+            pet.Status = status;
+            return pet;
+        }
 
         public static Category GetCategory(int id) => id switch
             {
