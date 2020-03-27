@@ -6,18 +6,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 
 namespace PetStoreAPITests
 {
     [Parallelizable(ParallelScope.Fixtures)]
     [TestFixture]
-    public class PetEndpointTests
+    public class PetEndpointTests : TestBase
     {
-        private PetStoreApi BasicApi => PetStoreApiClientFactory.GetBasicPetStoreApi();
-        private PetStoreApi ApiIgnoring400AndDeserializingErrors => PetStoreApiClientFactory.GetApiIgnoring4xxAndDeserializerErrors();
+        private PetStoreApi BasicApi => new PetStoreApi(ClientConfig.GetBasicConfig(Protocol, BaseApiPath));
+        private PetStoreApi ApiIgnoring400AndDeserializingErrors => new PetStoreApi(ClientConfig.GetConfigIgnoring4xxAndDeserializerError(Protocol, BaseApiPath));
 
-
+        #region Basic CRUD - happy path
         [Test]
         public void AddPetReturns200()
         {
@@ -47,7 +48,7 @@ namespace PetStoreAPITests
 
             foreach(var status in petsWithDifferentStatuses.Select(x => x.Status))
             {
-                var apiIgnoringErrors = PetStoreApiClientFactory.GeteApiIgnoringMissingRequiredFields(); // Due to bug service accepts and then returns pet objects with required fields missing, but that's other kind of problem so we're ignoring it here and just checking statuses
+                var apiIgnoringErrors = new PetStoreApi(ClientConfig.GetConfigIgnoringMissingRequiredFields(Protocol, BaseApiPath)); // Due to bug service accepts and then returns pet objects with required fields missing, but that's other kind of problem so we're ignoring it here and just checking statuses
                 var returnedPets = apiIgnoringErrors.GetPets((PetStatus)status);
 
                 Assert.That(returnedPets.Any());
@@ -89,5 +90,7 @@ namespace PetStoreAPITests
             Assert.AreEqual(null, api.GetPet((long)pet.Id), "Service returned pet, when it should be deleted");
             Assert.AreEqual(HttpStatusCode.NotFound, api.LastResponse.StatusCode, "Getting deleted pet didn't return 404");
         }
+
+        #endregion
     }
 }

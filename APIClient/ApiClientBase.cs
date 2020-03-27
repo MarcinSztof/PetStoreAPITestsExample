@@ -11,21 +11,24 @@ namespace APIClient
 {
     public abstract class ApiClientBase
     {
-        protected static readonly HttpClient HttpClient = new HttpClient();
-        public readonly string BaseUrl;
+        protected static readonly HttpClient HttpClient = new HttpClient(); // It is thread-safe, and using single instance for the whole life of an application makes better use of sockets
+        public readonly Protocol Protocol;
+        public readonly string BaseApiPath;
+        public string BaseUrl => Protocol.ToString().ToLower() + "://" + BaseApiPath;
         protected IAuthModule AuthModule;
         protected ISerializer Serializer;
         protected RequestBuilder RequestBuilder;
         public ResponseStatusCategory[] AcceptedResponseStatuses { get; set; }
         public HttpResponseMessage LastResponse { get; private set; }
 
-        protected ApiClientBase(string url, IAuthModule auth, ISerializer serializer, RequestBuilder requestBuilder, ResponseStatusCategory[] acceptedResponseStatuses)
+        protected ApiClientBase(ClientConfig config)
         {
-            BaseUrl = url;
-            AuthModule = auth;
-            Serializer = serializer;
-            RequestBuilder = requestBuilder;
-            AcceptedResponseStatuses = acceptedResponseStatuses;
+            Protocol = config.Protocol;
+            BaseApiPath = config.ApiPath;
+            AuthModule = config.AuthModule;
+            Serializer = config.Serializer;
+            RequestBuilder = config.RequestBuilder;
+            AcceptedResponseStatuses = config.AcceptedResponseStatuses;
         }
 
         public HttpResponseMessage SendRequest(HttpRequestMessage request)
