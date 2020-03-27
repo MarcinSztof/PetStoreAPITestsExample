@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace APIClient.Serializers
+﻿namespace APIClient.Serializers
 {
     public interface ISerializer
     {

@@ -1,10 +1,6 @@
-﻿using APIClient.Auth;
-using APIClient.Models;
-using APIClient.Serializers;
-using System;
+﻿using APIClient.Models;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 
 namespace APIClient
 {

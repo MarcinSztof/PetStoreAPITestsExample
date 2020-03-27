@@ -3,6 +3,7 @@ using NUnit.Framework;
 
 namespace PetStoreAPITests
 {
+    // In real-life scenario here probably also things like clearing DB or seeding default data would be done, any setup required for tests for this specific API 
     public class PetStoreApiTestsBase
     {
         protected Protocol Protocol { get; private set; }
