@@ -30,5 +30,15 @@ namespace PetStoreAPITests.Data
                 2 => new Category() { Id = 2, Name = "Fishes"},
                 _ => new Category() { Id = 3, Name = "Rodents"}
             };
+
+        public static Order GetBasicOrder() => new Order()
+        {
+            Id = DateGenerationUtils.GetRandomInt32(100000, 999999),
+            PetId = DateGenerationUtils.GetRandomInt32(100000, 999999),
+            Quantity = 1,
+            ShipDate = DateTime.Now.ToUniversalTime().Date.AddDays(7),
+            Status = OrderStatus.Placed,
+            Complete = false
+        };
     }
 }

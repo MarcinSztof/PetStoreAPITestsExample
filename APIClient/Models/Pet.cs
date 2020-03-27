@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace APIClient.Models
+﻿namespace APIClient.Models
 {
     public class Pet : ModelBase
     {
@@ -27,7 +23,6 @@ namespace APIClient.Models
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public PetStatus? Status { get; set; }
-
 
     }
 }

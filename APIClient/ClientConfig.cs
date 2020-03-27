@@ -20,14 +20,22 @@ namespace APIClient
                 AuthModule = new NoAuthModule(), 
                 Serializer = new JsonSerializer(true), 
                 RequestBuilder = new RequestBuilder("application/json", Encoding.UTF8),
-                AcceptedResponseStatuses = new ResponseStatusCategory[] { ResponseStatusCategory.Status2xx }
+                AcceptedResponseStatuses = new [] { ResponseStatusCategory.Status2xx }
             };
 
         public static ClientConfig GetConfigIgnoring4xxAndDeserializerError(Protocol protocol, string apiPath)
         {
             var config = GetBasicConfig(protocol, apiPath);
             config.Serializer = new JsonSerializer(false);
-            config.AcceptedResponseStatuses = new ResponseStatusCategory[] { ResponseStatusCategory.Status2xx, ResponseStatusCategory.Status4xx };
+            config.AcceptedResponseStatuses = new [] { ResponseStatusCategory.Status2xx, ResponseStatusCategory.Status4xx };
+            return config;
+        }
+
+        public static ClientConfig GetConfigIgnoringStatusAndDeserializerError(Protocol protocol, string apiPath)
+        {
+            var config = GetBasicConfig(protocol, apiPath);
+            config.Serializer = new JsonSerializer(false);
+            config.AcceptedResponseStatuses = new [] { ResponseStatusCategory.Status2xx, ResponseStatusCategory.Status4xx, ResponseStatusCategory.Status5xx };
             return config;
         }
 
